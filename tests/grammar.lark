@@ -1,0 +1,62 @@
+?command: var ":=" a                -> assign_var
+    | arr "[" a "]" ":=" a          -> assign_arr
+    | "read" var                    -> read_var
+    | "read" arr "[" a "]"          -> read_arr
+    | "write" a                     -> write
+    | "skip"                        -> skip
+    | command ";" command     
+    | "if" gc "fi"                  -> if_
+    | "do" gc "od"                  -> while_
+    | "continue"                    -> continue_
+    | "break"                       -> break_
+    | "try" command "catch" hc "yrt"
+    | "throw" exp
+    | "print" a                     -> print
+
+?gc: b "->" command     -> cond
+    | gc "[]" gc        -> case
+    
+?hc: exp ":" command 
+    | hc "[]" hc
+
+?a : term
+    | a "+" term    -> add
+    | a "-" term    -> sub
+
+?term : item
+    | term "*" item -> mul
+    | term "/" item -> div
+    | term "%" item -> modulo
+
+?item : NUMBER         -> num
+    | var
+    | arr"[" a "]"
+    | "-" item         -> neg
+    | "(" a  ")"    
+
+?b : "true"         -> true
+    | "false"       -> false
+    | b "&" b       -> and_
+    | b "|" b       -> or_
+    | b "&&" b
+    | b "||" b
+    | "!" b         -> not_
+    | a "=" a       -> eq
+    | a "!=" a      -> ne
+    | a ">" a       -> gt
+    | a ">=" a      -> ge
+    | a "<" a       -> lt
+    | a "<=" a      -> le
+    | "(" b ")"     
+
+
+?arr:NAME           -> arr_name
+
+?var:NAME           -> name
+
+?exp:NAME           -> name
+
+%import common.CNAME -> NAME
+%import common.NUMBER
+%import common.WS
+%ignore WS

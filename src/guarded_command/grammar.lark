@@ -1,0 +1,62 @@
+?command: var ":=" a                -> assign_var
+    | arr "[" a "]" ":=" a          -> assign_arr
+    | "read" var                    -> read_var
+    | "read" arr "[" a "]"          -> read_arr
+    | "write" a                     -> write
+    | "skip"                        -> skip
+    | command ";" command     
+    | "if" gc "fi"                  -> if
+    | "do" gc "od"                  -> while
+    | "continue"                    -> continue
+    | "break"                       -> break
+    | "try" command "catch" hc "yrt"
+    | "throw" exp
+    | "print" a                     -> print
+
+?gc: b "->" command 
+    | gc "[]" gc
+    
+?hc: exp ":" command 
+    | hc "[]" hc
+
+?a : term
+    | a "+" term    -> add
+    | a "-" term    -> sub
+
+?term : item
+    | term "*" item -> mul
+    | term "/" item -> div
+    | term "%" item -> modulo
+
+?item : NUMBER         -> num
+    | var
+    | arr"[" a "]"
+    | "-" item         -> neg
+    | "(" a  ")"    
+
+?b : "true"         -> true
+    | "false"       -> false
+    | b "&" b       -> and
+    | b "|" b       -> or
+    | b "&&" b
+    | b "||" b
+    | "!" b         -> not
+    | a "=" a       -> eq
+    | a "!=" a      -> ne
+    | a ">" a       -> gt
+    | a ">=" a      -> ge
+    | a "<" a       -> lt
+    | a "<=" a      -> le
+    | "(" b ")"     
+
+
+?arr:NAME           -> name
+
+?var:NAME           -> name
+
+?exp:NAME           -> name
+
+%import common.CNAME -> NAME
+%import common.NUMBER
+%import common.WS
+%ignore WS

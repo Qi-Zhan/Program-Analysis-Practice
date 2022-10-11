@@ -1,0 +1,8 @@
+do i<n -> z:=A[i];
+          if z>0 -> x:=x+z;
+                    y:=y+1
+          [] z<=0 -> skip
+          fi;
+          i:=i+1
+od;
+write x/y

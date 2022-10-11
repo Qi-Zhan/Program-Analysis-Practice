@@ -1,0 +1,9 @@
+i:=0;
+do i<n -> j:=0;
+          do j<m -> u:=(i*m)+j;
+                    t:=(j*n)+i;
+                    B[t]:=A[u];
+                    j:=j+1
+          od;
+          i:=i+1
+od

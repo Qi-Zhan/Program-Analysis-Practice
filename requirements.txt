@@ -1,2 +1,4 @@
 lark
 z3-solver
+graphviz
+unittest

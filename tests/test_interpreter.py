@@ -1,3 +1,4 @@
+from random import shuffle
 import unittest
 import os
 import sys
@@ -43,8 +44,19 @@ class VariableTestCase(unittest.TestCase):
         self.assertEqual(99, res.read_var('x'))
 
 class ArrayTestCase(unittest.TestCase):
-    pass
-
+    def test_assign(self):
+        code = "a[0] := 2; a[1] := 4; a[2] := a[1] + 1"
+        program = Program(code)
+        res = program.run({}, {'a': [1,2,3]})
+        self.assertEqual([2, 4, 5], res.read_array('a'))
+    
+    def test_insertion_sort(self):
+        dir = os.path.join(test_dir, 'src', 'insertionsort.gc')
+        program = Program.read_file(dir)
+        array = list(range(20))
+        shuffle(array)
+        res = program.run({'n': 20}, {'A': array})
+        self.assertEqual(sorted(array), res.arrs['A'])
 
 if __name__ == '__main__':
     unittest.main()

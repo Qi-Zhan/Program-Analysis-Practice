@@ -5,16 +5,16 @@
     | "write" a                     -> write
     | "skip"                        -> skip
     | command ";" command     
-    | "if" gc "fi"                  -> if
-    | "do" gc "od"                  -> while
-    | "continue"                    -> continue
-    | "break"                       -> break
-    | "try" command "catch" hc "yrt"
-    | "throw" exp
-    | "print" a                     -> print
+    | "if" gc "fi"                  -> if_
+    | "do" gc "od"                  -> while_
+    | "continue"                    -> continue_
+    | "break"                       -> break_
+    | "try" command "catch" hc"yrt" -> try_
+    | "throw" exp                   -> throw_
+    | "print" a                     -> print_
 
-?gc: b "->" command 
-    | gc "[]" gc
+?gc: b "->" command     -> cond
+    | gc "[]" gc        -> case
     
 ?hc: exp ":" command 
     | hc "[]" hc
@@ -30,17 +30,17 @@
 
 ?item : NUMBER         -> num
     | var
-    | arr"[" a "]"
+    | arr"[" a "]"     -> arr
     | "-" item         -> neg
     | "(" a  ")"    
 
 ?b : "true"         -> true
     | "false"       -> false
-    | b "&" b       -> and
-    | b "|" b       -> or
-    | b "&&" b
-    | b "||" b
-    | "!" b         -> not
+    | b "&" b       -> and_
+    | b "|" b       -> or_
+    | b "&&" b      -> and_cut
+    | b "||" b      -> or_cut
+    | "!" b         -> not_
     | a "=" a       -> eq
     | a "!=" a      -> ne
     | a ">" a       -> gt

@@ -1,5 +1,12 @@
+""" 
+This file provides:
+* class Program, represent an abstract 
+* class Memory, represent runtime environment
+* class Interpreter, to run the code
+"""
 from __future__ import annotations
 from lark import Lark, Tree, v_args
+from lark.reconstruct import Reconstructor
 from typing import List, Dict
 from lark.visitors import Interpreter
 import os
@@ -20,8 +27,13 @@ class Program:
             code = f.read()
             return Program(code)
 
+    def tree2code(self, tree: Tree) -> str:
+        gc_parser = Lark(self.grammar, start = 'command', maybe_placeholders = False)
+        reconstructor = Reconstructor(gc_parser)
+        return reconstructor.reconstruct(tree)
+
     def parse(self):
-        gc_parser = Lark(self.grammar, start='command')
+        gc_parser = Lark(self.grammar, start='command', maybe_placeholders = False)
         tree = gc_parser.parse(self.code)
         return tree
     
